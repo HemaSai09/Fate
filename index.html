@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search with Camera</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search...">
+    <button id="cameraBtn"><img src="camera_icon.png" alt="Camera"></button>
+  </div>
+
+  <div id="cameraModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <video id="cameraFeed" autoplay></video>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
