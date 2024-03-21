@@ -29,12 +29,12 @@ function openCamera() {
 // Close the camera
 function closeCamera() {
   const stream = video.srcObject;
-  const tracks = stream.getTracks();
-
-  tracks.forEach(track => {
-    track.stop();
-  });
-
-  video.srcObject = null;
+  if (stream) {
+    const tracks = stream.getTracks();
+    tracks.forEach(track => {
+      track.stop();
+    });
+    video.srcObject = null;
+  }
   modal.style.display = 'none';
 }
