@@ -1,40 +1,34 @@
-const cameraBtn = document.getElementById('cameraBtn');
-const modal = document.getElementById('cameraModal');
-const closeBtn = document.getElementsByClassName('close')[0];
-const video = document.getElementById('cameraFeed');
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const constraints = { video: true };
 
-// Open the camera modal when the camera button is clicked
-cameraBtn.addEventListener('click', () => {
-  openCamera();
-});
+// Get access to the camera
+navigator.mediaDevices.getUserMedia(constraints)
+  .then(function(stream) {
+    video.srcObject = stream;
+    video.play();
+  })
+  .catch(function(err) {
+    console.log("An error occurred: " + err);
+  });
 
-// Close the camera modal when the close button is clicked
-closeBtn.addEventListener('click', () => {
-  closeCamera();
-});
+// When the video is playing, draw the blue rectangular box
+video.addEventListener('play', function() {
+  const context = canvas.getContext('2d');
+  const width = video.videoWidth;
+  const height = video.videoHeight;
+  canvas.width = width;
+  canvas.height = height;
 
-// Open the camera
-function openCamera() {
-  navigator.mediaDevices.getUserMedia({ video: true })
-    .then(stream => {
-      video.srcObject = stream;
-      modal.style.display = 'block';
-    })
-    .catch(err => {
-      console.error('Error accessing camera:', err);
-      alert('Error accessing camera. Please make sure your camera is connected and accessible.');
-    });
-}
-
-// Close the camera
-function closeCamera() {
-  const stream = video.srcObject;
-  if (stream) {
-    const tracks = stream.getTracks();
-    tracks.forEach(track => {
-      track.stop();
-    });
-    video.srcObject = null;
+  function draw() {
+    context.drawImage(video, 0, 0, width, height);
+    context.beginPath();
+    context.rect(width/4, height/4, width/2, height/2);
+    context.lineWidth = 2;
+    context.strokeStyle = 'blue';
+    context.stroke();
+    requestAnimationFrame(draw);
   }
-  modal.style.display = 'none';
-}
+
+  draw();
+});
